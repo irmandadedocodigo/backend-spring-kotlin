@@ -4,10 +4,12 @@ import com.irmandadedocodigo.core.controllers.viewmodels.auth.RegisterRequest
 import com.irmandadedocodigo.core.infra.entities.User
 import com.irmandadedocodigo.core.infra.repositories.RoleRepository
 import com.irmandadedocodigo.core.infra.repositories.UserRepository
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlin.jvm.Throws
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -35,7 +37,7 @@ class UserService(
 
     @Transactional(readOnly = true)
     fun byId(id: String): User? {
-        return this.userRepository.findById(id).getOrNull()
+        return this.userRepository.findById(id).orElseThrow{ EntityNotFoundException() }
     }
 
     @Transactional(readOnly = true)

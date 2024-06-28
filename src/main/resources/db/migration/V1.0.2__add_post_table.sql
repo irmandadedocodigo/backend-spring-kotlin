@@ -1,0 +1,6 @@
+CREATE TABLE posts(
+    id SERIAL PRIMARY KEY,
+    content VARCHAR(255) NOT NULL,
+    user_id TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);

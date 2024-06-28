@@ -22,13 +22,13 @@ class AuthController internal constructor(
     private val authenticationManager: AuthenticationManager,
 ) {
     @PostMapping("register")
-    fun addNewUser(@Valid @RequestBody request: RegisterRequest): ResponseEntity<User> {
+    fun addNewUser(@RequestBody @Valid request: RegisterRequest): ResponseEntity<User> {
         return ResponseEntity.ok(this.userService.insert(request))
     }
 
     @PostMapping("login")
-    fun login(@RequestBody() authRequest: AuthRequest): ResponseEntity<AuthResponse> {
-        val user = this.userService.byEmail(authRequest.email)
+    fun login(@RequestBody() @Valid authRequest: AuthRequest): ResponseEntity<AuthResponse> {
+        val user = this.userService.byEmail(authRequest.email!!)
         val usernamePassword = UsernamePasswordAuthenticationToken(user?.id, authRequest.password)
         val auth = authenticationManager.authenticate(usernamePassword)
 
