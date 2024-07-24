@@ -5,6 +5,7 @@ import com.irmandadedocodigo.core.infra.entities.User
 import com.irmandadedocodigo.core.infra.repositories.RoleRepository
 import com.irmandadedocodigo.core.infra.repositories.UserRepository
 import jakarta.persistence.EntityNotFoundException
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -50,5 +51,13 @@ class UserService(
         val newUser = User(user.name, user.email, encoder.encode(user.password))
         newUser.roles = setOf(role!!)
         return userRepository.save(newUser)
+    }
+
+    fun verifyIfEmailAlreadyExists(email: String, id: String) {
+        userRepository.findByEmail(email)?.let { user ->
+            if (user.id != id) {
+                throw DataIntegrityViolationException("Email [$email] already exists!")
+            }
+        }
     }
 }
